@@ -21,6 +21,17 @@ test('generates operations', () => {
 
 })
 
+test('derive displayValue first input', () => {
+    const inputs: CalcInput[] = [
+        {type: InputType.Numerical, value: 1},
+
+    ]
+
+    const state = Calc.getState(inputs)
+    expect(state.displayValue).toEqual(1)
+
+})
+
 test('derive displayValue input', () => {
     const inputs: CalcInput[] = [
         {type: InputType.Numerical, value: 1},

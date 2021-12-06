@@ -46,12 +46,12 @@ export type OperationsBuilder = {
                                  operator: OperatorType.Equals,
                                  value: 0
                              }],
-                             working: {operator: input.operator, value: 0}
+                             working: {operator: OperatorType.Add, value: 0}
                          }
                      } else {
                          return {
                              operations: [...builder.operations, builder.working],
-                             working: {operator: OperatorType.Add, value: 0}
+                             working: {operator: input.operator, value: 0}
                          }
                      }
 
@@ -68,7 +68,7 @@ export type OperationsBuilder = {
            case OperatorType.Subtract:
                return sum - operation.value;
            case OperatorType.Equals:
-               return sum
+               return sum;
        }
    }, 0)
 
@@ -78,13 +78,16 @@ const getState = (inputs: CalcInput[]): CalcState => {
     const operations = builder.operations
     const lastOperation = operations.length ? operations[operations.length - 1]: null
 
-    if (!lastOperation) return {displayValue: 0}
+    if (!lastOperation) return {displayValue: builder.working.value}
+
+    const lastInput = inputs.length? inputs[inputs.length - 1]: null
+    const total = getTotal(operations)
 
     switch (lastOperation.operator){
         case OperatorType.Equals:
-            return {displayValue: getTotal(operations)}
+            return {displayValue: total}
         default:
-            return {displayValue: builder.working.value}
+            return {displayValue: lastInput && lastInput.type === InputType.Numerical?  builder.working.value: total}
     }
 
 };
